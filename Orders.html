@@ -100,7 +100,7 @@ var modalbody = $("#orders_modal");
 
     $.ajax({
                 type:"GET",
-                url:"http://techbachelor.somee.com/api/order/getcurrentorders",
+                url:"https://techbachelor.somee.com/api/order/getcurrentorders",
                 dataType:"json",
                 success :function(data){
                     
@@ -135,7 +135,7 @@ var modalbody = $("#orders_modal");
                 dataToSend={id:orderId};
                 $.ajax({
                     type: "GET",
-            url: "http://techbachelor.somee.com/api/order/get_ID_orders",
+            url: "https://techbachelor.somee.com/api/order/get_ID_orders",
             contentType: "application/json",
             data:{id : orderId}, // Send as JSON
             dataType: "json", // Expect JSON response
