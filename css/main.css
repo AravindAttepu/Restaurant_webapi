@@ -1,0 +1,112 @@
+.custom-dropdown {
+    position: relative;
+    width: 200px; /* Set the desired width */
+}
+
+.selected-option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background: #fff;
+}
+.c_white{
+    color: white;
+}
+.options {
+    display: none; /* Hide the dropdown options by default */
+    position: absolute;
+    border: 1px solid #ccc;
+    background: #fff;
+    width: 100%;
+    z-index: 1000;
+}
+
+.options div {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between; /* Space between name and price */
+}
+
+.options div:hover {
+    background: #f0f0f0; /* Highlight on hover */
+}
+
+.custom-dropdown:hover .options {
+    display: block; /* Show options when hovering over the dropdown */
+}
+
+.price {
+    margin-left: auto; /* Automatically push the price to the right */
+}
+
+#fooditemlist .food-item:hover {
+    background-color: #9192a4;  /* Change to any color you like */
+    cursor: pointer;
+    /* Additional hover effects */
+    color: #1d3d9c;
+    border-radius: 5px;
+}
+/* Base font size for all devices */
+body {
+    font-size: 16px;
+   
+}
+
+.displayload{
+    display: block;
+}
+.hideload{
+    display :none;
+}
+
+.readonly-input[readonly] {
+    background-color: #e9ecef; /* Bootstrap light gray background for readonly */
+    color: #6c757d;            /* Gray text */
+    border-color: #ced4da;     /* Border color for better contrast */
+    cursor: not-allowed;       /* Show "not allowed" cursor to indicate it's not editable */
+}
+
+/* Small devices (phones, up to 600px) */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.5rem; /* 24px */
+    }
+    h2 {
+        font-size: 1.25rem; /* 20px */
+    }
+    *{
+        font-size: 0.875rem; /* 14px */
+    }
+    
+}
+
+/* Medium devices (tablets, up to 992px) */
+@media (min-width: 601px) and (max-width: 992px) {
+    h1 {
+        font-size: 2rem; /* 32px */
+    }
+    h2 {
+        font-size: 1.5rem; /* 24px */
+    }
+    * {
+        font-size: 1rem; /* 16px */
+    }
+  
+}
+
+/* Large devices (desktops, 993px and up) */
+@media (min-width: 993px) {
+    h1 {
+        font-size: 2.5rem; /* 40px */
+    }
+    h2 {
+        font-size: 2rem; /* 32px */
+    }
+    p {
+        font-size: 1.125rem; /* 18px */
+    }
+    
+}
+
+
+

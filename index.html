@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Home</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/main.css'>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+   
+    <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css” />
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src='main.js'></script>
+</head>
+<body>
+    <style>
+        .displayload{
+            display: block;
+        }
+        .hideload{
+            display :none;
+        }
+    </style>
+    <div class="container" >
+        <div class="text-center mt-2 " id="loading_icon">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        <div class="h1 text-center font-monospace">Easy Order Management</div>
+        <div id="successMessage" style="display:none; position: absolute; color: white; background-color: green; padding: 10px; border-radius: 5px; width: fit-content;">
+            Success! Your Order added successfully.
+        </div>
+        <div id="failmessage" style="display:none; position: absolute; color: white; background-color: rgb(255, 10, 10); padding: 10px; border-radius: 5px; width: fit-content;">
+            Fail! Check the order correctly.
+        </div>
+        <div class="container " style="max-width: 900px;" >
+            <div class="row " style="color: white;">
+                <div class="col-6 bg-black">
+                    <div class="order">
+                        <div class="mb-3">
+                        <label class="form-label" for="orderid">OrderNo</label>
+                        <input class="form-control readonly-input" id="orderid" type="text"  readonly >
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="orderid">Customer</label>
+                        
+                     <select class="form-select mb-3" name="select customer" id="customername">
+                        <option value="0">Select Customer</option>
+                        
+                     </select>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-6 bg-black"><div class="order">
+                    <div class="mb-3">
+                    <label class="form-label" for="orderid">Payment Method</label>
+                    <select class="form-select " data-live-search="true" id="paymentmethod">
+                        <option >Cash</option>
+                        <option >Card</option>
+                        
+                     </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="orderid">Total</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" >₹</span>
+                        <input type="text" class="form-control" id="t_price" readonly disabled value="0.00">
+                    </div>
+                </div>
+                </div>
+           </div>
+            </div>
+           
+            <div class="row"  style="color: white;">
+                <div class="col-12  bg-black">
+                    <div class="mb-3">
+                        <label class="form-label"  for="orderid">Food Items</label>
+                       <ul class="list-group" style="height: 200px; overflow-y: scroll; " id="fooditemlist">
+                            
+                            </ul>
+                         
+                    </div>
+                </div>
+          
+            </div>
+           
+            <div class="row">         
+<div class="col-12 overflow-y-scroll" style="height: 180px;" id="orderitemlist">
+   
+     </div>
+    
+    
+    
+    
+  
+    <div class="col-12 text-center mt-3 ">
+        <button class="btn m-1 btn-primary " id="submit_btn" style="background-color: rgb(223, 108, 25);" type="submit">Submit</button>
+        <button class="btn m-1 btn-primary " type="submit" onclick="window.location.href='Orders.html'">Orders</button>
+    </div>
+    <p>Not Registered?<a class="bx-anchor" href="register.html" style="cursor: pointer;">Click here</a></p>
+</div>
+</div>
+</div>   
+            
+       
+</body>
+<script>
+$(document).ready(function(){
+
+    $("#fooditemlist")
+    function getload()
+    {
+        $("#loading_icon").toggleClass("hideload");
+    }
+   let masterid;
+    if (window.innerWidth < 600) {  // Adjust the width condition as needed
+        $("#orderitemlist").addClass("col-10");
+    }
+    
+    async function startpage(func1, func2)
+    {
+        await func1();
+        getload();
+    }
+    startpage(getdata,getload)
+  getid();
+
+  function success()
+  {
+   
+        $("#successMessage").fadeIn().delay(2000).fadeOut(); 
+   
+  }
+    
+  function failed(str)
+  {
+   
+        $("#failmessage").text(str).fadeIn().delay(2000).fadeOut(); 
+  
+  }
+    //submit button
+$("#submit_btn").click(function(){
+
+    let customerid,paymenttype;
+    let selectedOptions= $("#customername option:selected");
+    selectedOptions.each(function() {
+            customerid = parseInt($(this).val());       // Get the value of the selected option
+                let text = $(this).text();       // Get the text of the selected option
+                console.log("Selected Value: ${customerid}, Selected Text: ${text}");
+            });
+            
+            selectedOptions= $("#paymentmethod option:selected");
+    selectedOptions.each(function() {
+         let text= $(this).val();       // Get the value of the selected option
+         paymenttype = $(this).text();       // Get the text of the selected option
+                console.log(`Selected Value: ${paymenttype}, Selected Text: ${text}`);
+            });
+            if  ($("#orderitemlist").is(':empty()') || customerid<1)
+                {
+                   failed("Order Empty");
+                }
+                else
+                {
+orderdetails= $("#orderitemlist .order_detail");
+let orderitems=[];
+
+orderdetails.each(function(){
+    let orderitem={
+                FoodItemID:$(this).data("id"),
+                FoodItemPrice:parseFloat($(this).find("#itemprice").text()),
+                Quantity: parseInt($(this).find("#quantity").text())
+            };
+            orderitems.push(orderitem);
+                });
+        
+
+let price = parseFloat($("#t_price").val());
+            const masteredata={
+        CustomerID:customerid,
+        pMethod:paymenttype,
+        gTotal:price,
+        OrderDetails:orderitems
+    };
+
+    console.log(masteredata);
+    $.ajax({
+    type: "POST",
+            url: "http://techbachelor.somee.com/api/home/postmaster",
+            contentType: "application/json",
+            data: JSON.stringify(masteredata),
+            success: function(response) {
+                console.log("Item added successfully:", response);
+                $("#t_price").val("0.00");
+                $("#orderitemlist").empty();
+                getid();success();
+             
+            },
+            error: function(xhr, status, error) {
+                console.error("Error adding item:", error,xhr);
+                failed(error);
+            }
+
+
+});
+                }
+
+});
+function getid()
+{
+//get last order id
+$.ajax({
+    url: "http://techbachelor.somee.com/api/Home/getmasterid",
+    method: "GET",
+    success: function(lastOrderId) {
+        masterid= parseInt(lastOrderId+1);
+        $("#orderid").val(masterid);
+        console.log("Last Order ID:", masterid);
+        // Use lastOrderId as needed
+    },
+    error: function(error) {
+        console.error("Error fetching last order ID:", error);
+    }
+    
+});
+
+}
+function getdata()
+{
+    getid();
+            $("#t_price").val("0.00");
+            //get customer api 
+            $.ajax({
+                type:"GET",
+                url:"http://techbachelor.somee.com/api/Home/getcustomers",
+                dataType:"json",
+                success :function(data){
+                    
+                    $.each(data,function(index,val)
+                {
+                    $("#customername").append("<option value="+val.customerID+">"+val.customerName+"</option>")
+                });
+                },
+                complete: function(jqXHR)
+                {
+                    
+                }
+
+            });
+            // get food items api
+            $.ajax({
+                type:"GET",
+                url:"http://techbachelor.somee.com/api/Home/getitems",
+                dataType:"json",
+                success:function(data)
+                {
+                    $("#fooditemlist").empty();
+                    $.each(data, function(index,val)
+                    {
+                        $("#fooditemlist").append( '<li class="list-group-item d-flex  justify-content-between food-item p-2"  data-id=' + val.foodItemID + '>'+
+                                        '<div class="col-8">'+val.foodItemName +'</div>'+
+                                        '<div>'+
+                                            '<span>₹: </span>'+
+                                            '<span>'+val.price+'</span>'
+                                        +'</div>'+
+                                    '</li>');
+
+                    });
+                }
+            });
+}
+$("#orderitemlist").on("click", "button", function(){
+let value=parseInt($(this).closest(".order_detail").find("#quantity").text());
+
+let rate= parseFloat($("#t_price").val()) || 0;
+let itemprice= parseFloat($(this).closest(".order_detail").find("#itemprice").text());
+if ($(this).attr("id") === "add") {
+        value += 1;  // Increment quantity
+        rate= rate+itemprice;
+      
+    } else if ($(this).attr("id") === "minus" && value > 0) {
+        value -= 1;  // Decrement quantity if greater than 0
+        rate= rate-itemprice;
+    }
+if(value<=0)
+{
+    $(this).closest(".order_detail").remove();
+}
+$(this).closest(".order_detail").find("#quantity").text(value);
+$("#t_price").val(rate.toFixed(2)   );
+});
+
+
+    $("#fooditemlist").on("click",".food-item", function(){
+        let itemName = $(this).find("div:first").text();
+    let itemPrice = parseFloat($(this).find("span:last").text());
+
+    // Get the current total price, parse it as a float, and add the item price
+    let currentTotal = parseFloat($("#t_price").val()) || 0;
+    let newTotal = currentTotal + itemPrice;
+    let id= $(this).data("id");
+    let existingOrderDetail = $("#orderitemlist .order_detail[data-id='" + id + "']");
+    
+    if (existingOrderDetail.length) {
+        // If it exists, increment the quantity value
+        let quantityLabel = existingOrderDetail.find("#quantity");
+        let quantity = parseInt(quantityLabel.text());
+        quantity += 1; // Increment the quantity
+        quantityLabel.text(quantity);
+    } else {
+        $("#orderitemlist").append(
+    '<div class="order_detail p-1"  data-id='+ id+'>' +
+        '<div class="row m-1 text-center">' +
+            '<div class="col-3  d-flex justify-content-around">' +
+                '<button class="btn btn-secondary" id="minus">-</button>' +
+                '<label class="p-2 pb-0 pt-0 align-content-center" id="quantity">1</label>' +
+                '<button class="btn btn-secondary" id="add">+</button>' +
+            '</div>' +
+            '<div class="col w-auto "><label class="align-self-center text-wrap" for="">'+itemName+'</label><label id="itemprice" style="display:none">'+itemPrice+'</label></div>' +
+            '<div class="col-2 del_icon" style="color: red;" >' +
+                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">' +
+                    '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>' +
+                    '<path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>' +
+                '</svg>' +
+            '</div>' +
+        '</div>' +
+    '</div>'
+);
+                }
+$("#t_price").val(newTotal.toFixed(2));
+                
+
+
+        
+        
+    });
+    $("#orderitemlist").on("click",".del_icon",function(){
+        let del_price = parseFloat($(this).closest(".order_detail").find("#quantity").text()) * parseFloat($(this).closest(".order_detail").find("#itemprice").text());
+        let current = parseFloat($("#t_price").val()) || 0;
+        current= current - del_price;
+        $("#t_price").val(current.toFixed(2));
+        $(this).closest(".order_detail").remove();
+
+    });
+});
+
+
+    </script>
+</html>
