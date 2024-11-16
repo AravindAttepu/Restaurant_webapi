@@ -189,7 +189,7 @@ let price = parseFloat($("#t_price").val());
     console.log(masteredata);
     $.ajax({
     type: "POST",
-            url: "http://techbachelor.somee.com/api/home/postmaster",
+            url: "https://techbachelor.somee.com/api/home/postmaster",
             contentType: "application/json",
             data: JSON.stringify(masteredata),
             success: function(response) {
@@ -213,7 +213,7 @@ function getid()
 {
 //get last order id
 $.ajax({
-    url: "http://techbachelor.somee.com/api/Home/getmasterid",
+    url: "https://techbachelor.somee.com/api/Home/getmasterid",
     method: "GET",
     success: function(lastOrderId) {
         masterid= parseInt(lastOrderId+1);
@@ -235,7 +235,7 @@ function getdata()
             //get customer api 
             $.ajax({
                 type:"GET",
-                url:"http://techbachelor.somee.com/api/Home/getcustomers",
+                url:"https://techbachelor.somee.com/api/Home/getcustomers",
                 dataType:"json",
                 success :function(data){
                     
@@ -253,7 +253,7 @@ function getdata()
             // get food items api
             $.ajax({
                 type:"GET",
-                url:"http://techbachelor.somee.com/api/Home/getitems",
+                url:"https://techbachelor.somee.com/api/Home/getitems",
                 dataType:"json",
                 success:function(data)
                 {
